@@ -1,0 +1,32 @@
+﻿@page "/books"
+
+@using System.Net.Http
+@using System.Net.Http.Json
+@using BookUICrud.Data
+@inject HttpClient Http
+<h3>BooksList</h3>
+
+<table class="table">
+    @if (oResponse != null && oResponse.Data!=null) 
+    {    
+        @foreach (var oElement in oResponse.Data)
+        {
+        <tr>
+            <td>@oElement.Title</td>
+            <td>@oElement.Description</td>
+            <td>@oElement.Category</td>
+            <td>@oElement.Author</td>
+        </tr>
+        }
+    }
+</table>
+
+
+@code {
+    public string Url = "/api/books";
+    public Response oResponse = new Response();
+
+    //Se ejecutara este metodo cuando todo el DOM cargue
+    protected override async Task OnInitializedAsync() =>
+        oResponse = await Http.GetFromJsonAsync<Response>(Url);
+}
